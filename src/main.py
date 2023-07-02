@@ -29,13 +29,10 @@ def main(client: WebClient):
         result_list.append(result)
 
     if len(result_list) == 0:
-        try:
-            client.chat_postMessage(
-                channel=SLACK_CHANNEL,
-                text="今日の論文ピックアップはありませんでした。",
-            )
-        except SlackApiError as e:
-            print(f"Error posting message: {e}")
+        client.chat_postMessage(
+            channel=SLACK_CHANNEL,
+            text="今日の論文ピックアップはありませんでした。",
+        )
     elif len(result_list) < 3:
         results = result_list
     else:
@@ -51,16 +48,13 @@ def main(client: WebClient):
 ---
 {Summarizer(result, lang=SUMMARIZE_LANGUAGE, content=SUMMARIZE_CONTENT).summarize()}
 """
-        try:
-            response = client.chat_postMessage(
-                channel=SLACK_CHANNEL,
-                mrkdwn=True,
-                text=message,
-                unfurl_links=False,
-            )
-            print(f"Message posted: {response['ts']}")  # ts stands for `timestamp`
-        except SlackApiError as e:
-            print(f"Error posting message: {e}")
+        response = client.chat_postMessage(
+            channel=SLACK_CHANNEL,
+            mrkdwn=True,
+            text=message,
+            unfurl_links=False,
+        )
+        print(f"Message posted: {response['ts']}")  # ts stands for `timestamp`
 
 
 if __name__ == "__main__":
