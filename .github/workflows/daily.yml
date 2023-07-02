@@ -8,11 +8,12 @@ on:
 jobs:
   post-to-slack:
     runs-on: ubuntu-latest
+    environment: private-slack-workspace
 
     env:
-      ARXIV_QUERY: "ti:%22 Materials Informatics %22"
+      ARXIV_QUERY: ${{ vars.ARXIV_QUERY}}
+      SLACK_CHANNEL: ${{ vars.SLACK_CHANNEL }}
       SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-      SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
     steps:
