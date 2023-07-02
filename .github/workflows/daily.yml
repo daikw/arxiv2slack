@@ -8,10 +8,16 @@ on:
 jobs:
   post-to-slack:
     runs-on: ubuntu-latest
-    environment: private-slack-workspace
-
+    strategy:
+      matrix:
+        include:
+          - environment: private-slack-workspace
+          - environment: akerun
+          - environment: nims-karakuri
+    environment: ${{ matrix.environment }}
     env:
-      ARXIV_QUERY: ${{ vars.ARXIV_QUERY}}
+      ARXIV_QUERY: ${{ vars.ARXIV_QUERY }}
+      SUMMARIZE_CONTENT: ${{ vars.SUMMARIZE_CONTENT }}
       SLACK_CHANNEL: ${{ vars.SLACK_CHANNEL }}
       SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
