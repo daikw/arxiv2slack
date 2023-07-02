@@ -13,7 +13,7 @@ jobs:
         include:
           - environment: private-slack-workspace
           - environment: akerun
-          - environment: nims-karakuri
+          - environment: karakuri-nims
     environment: ${{ matrix.environment }}
     env:
       ARXIV_QUERY: ${{ vars.ARXIV_QUERY }}
