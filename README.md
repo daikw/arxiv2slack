@@ -1,5 +1,7 @@
 # arxiv2slack
 
+[![cronjob](https://github.com/daikw/arxiv2slack/actions/workflows/daily.yml/badge.svg)](https://github.com/daikw/arxiv2slack/actions/workflows/daily.yml)
+
 ## Setup
 
 1. Prepare `.env` values:
