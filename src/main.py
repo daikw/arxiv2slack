@@ -16,8 +16,6 @@ ARXIV_QUERY = os.environ["ARXIV_QUERY"]
 SUMMARIZE_LANGUAGE = os.environ.get("SUMMARIZE_LANGUAGE", "ja")
 SUMMARIZE_CONTENT = os.environ.get("SUMMARIZE_CONTENT", "arxiv_summary")
 
-NoResultError = Exception("No articles found.")
-
 
 def main(client: WebClient):
     search = arxiv.Search(
@@ -31,7 +29,13 @@ def main(client: WebClient):
         result_list.append(result)
 
     if len(result_list) == 0:
-        raise NoResultError
+        try:
+            client.chat_postMessage(
+                channel=SLACK_CHANNEL,
+                text="今日の論文ピックアップはありませんでした。",
+            )
+        except SlackApiError as e:
+            print(f"Error posting message: {e}")
     elif len(result_list) < 3:
         results = result_list
     else:
@@ -63,13 +67,5 @@ if __name__ == "__main__":
     client = WebClient(token=SLACK_API_TOKEN)
     try:
         main(client)
-    except NoResultError:
-        try:
-            client.chat_postMessage(
-                channel=SLACK_CHANNEL,
-                text="今日の論文ピックアップはありませんでした。",
-            )
-        except SlackApiError as e:
-            print(f"Error posting message: {e}")
     except Exception as e:
         print(e)
