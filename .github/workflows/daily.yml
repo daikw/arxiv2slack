@@ -28,7 +28,6 @@ jobs:
         with:
           python-version: 3.11.4
           cache: "pipenv"
-      - run: echo $ARXIV_QUERY
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip

@@ -29,7 +29,7 @@ def main(client: WebClient):
         result_list.append(result)
 
     # Sample papers
-    results = random.sample(result_list, k=1)
+    results = random.sample(result_list, k=3)
 
     # Post to Slack
     for i, result in enumerate(results):
