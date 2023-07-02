@@ -1,3 +1,5 @@
+# see also: https://platform.openai.com/docs/models/gpt-3-5
+
 import os
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
@@ -5,9 +7,40 @@ import arxiv
 import openai
 import random
 
+import tiktoken
+from pypdf import PdfReader
+
 SLACK_API_TOKEN = os.environ["SLACK_API_TOKEN"]
 SLACK_CHANNEL = os.environ["SLACK_CHANNEL"]
 ARXIV_QUERY = os.environ["ARXIV_QUERY"]
+
+
+def summarize_pdf(result: arxiv.Result) -> str:
+    if not os.path.isdir("./tmp"):
+        os.mkdir("./tmp")
+    filepath = result.download_pdf("./tmp")
+
+    pdf = PdfReader(filepath)
+    text = ""
+    for page in pdf.pages:
+        text += page.extract_text()
+
+    # if token count exceeds, truncate text
+    enc = tiktoken.get_encoding("gpt2")
+    tokens = enc.encode(text)
+    if len(tokens) > 16384:
+        text = text[:16384]
+
+    system = """与えられた論文の要点を3つ挙げ、日本語で箇条書きにまとめてください。ただし、「この論文では」などの一般的な冒頭の表現は取り除き、情報の密度を高めてください。"""
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo-16k",
+        messages=[
+            {"role": "system", "content": system},
+            {"role": "user", "content": text},
+        ],
+        temperature=0.25,
+    )
+    return response["choices"][0]["message"]["content"]
 
 
 def summarize(result: arxiv.Result) -> str:
@@ -45,7 +78,7 @@ def main(client: WebClient):
 *Title*: {result.title}
 *PublishedAt*: {result.published.strftime('%Y-%m-%d %H:%M:%S')}
 ---
-{summarize(result)}
+{summarize_pdf(result)}
 """
         try:
             response = client.chat_postMessage(
