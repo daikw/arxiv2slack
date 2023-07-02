@@ -7,6 +7,9 @@ name = "pypi"
 arxiv = "*"
 slack-sdk = "*"
 openai = "*"
+pypdf = "*"
+ipython = "*"
+tiktoken = "*"
 
 [dev-packages]
 
