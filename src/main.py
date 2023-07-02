@@ -13,6 +13,9 @@ SLACK_API_TOKEN = os.environ["SLACK_API_TOKEN"]
 SLACK_CHANNEL = os.environ["SLACK_CHANNEL"]
 ARXIV_QUERY = os.environ["ARXIV_QUERY"]
 
+SUMMARIZE_LANGUAGE = os.environ.get("SUMMARIZE_LANGUAGE", "ja")
+SUMMARIZE_CONTENT = os.environ.get("SUMMARIZE_CONTENT", "arxiv_summary")
+
 
 def main(client: WebClient):
     search = arxiv.Search(
@@ -26,7 +29,7 @@ def main(client: WebClient):
         result_list.append(result)
 
     # Sample papers
-    results = random.sample(result_list, k=3)
+    results = random.sample(result_list, k=1)
 
     # Post to Slack
     for i, result in enumerate(results):
@@ -35,7 +38,7 @@ def main(client: WebClient):
 *Title*: {result.title}
 *PublishedAt*: {result.published.strftime('%Y-%m-%d %H:%M:%S')}
 ---
-{Summarizer(result).summarize_pdf()}
+{Summarizer(result, lang=SUMMARIZE_LANGUAGE, content=SUMMARIZE_CONTENT).summarize()}
 """
         try:
             response = client.chat_postMessage(
