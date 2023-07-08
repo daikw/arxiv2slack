@@ -1,12 +1,11 @@
 # see also: https://platform.openai.com/docs/models/gpt-3-5
 
 import os
-import random
 
-import arxiv
 from slack_sdk import WebClient
 
 from summarizer import Summarizer
+from search import ArxivSampler
 
 SLACK_API_TOKEN = os.environ["SLACK_API_TOKEN"]
 SLACK_CHANNEL = os.environ["SLACK_CHANNEL"]
@@ -17,26 +16,13 @@ SUMMARIZE_CONTENT = os.environ.get("SUMMARIZE_CONTENT", "arxiv_summary")
 
 
 def main(client: WebClient):
-    search = arxiv.Search(
-        query=ARXIV_QUERY,
-        max_results=100,
-        sort_by=arxiv.SortCriterion.SubmittedDate,
-        sort_order=arxiv.SortOrder.Descending,
-    )
-    result_list: list[arxiv.Result] = []
-    for result in search.results():
-        result_list.append(result)
-
-    if len(result_list) == 0:
+    results = ArxivSampler(query=ARXIV_QUERY, strategy="daily").sample(k=3)
+    if len(results) == 0:
         client.chat_postMessage(
             channel=SLACK_CHANNEL,
             text="今日の論文ピックアップはありませんでした。",
         )
-    elif len(result_list) < 3:
-        results = result_list
-    else:
-        # Sampling papers
-        results = random.sample(result_list, k=3)
+        return
 
     # Post to Slack
     for i, result in enumerate(results):
