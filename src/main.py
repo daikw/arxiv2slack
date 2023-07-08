@@ -5,7 +5,6 @@ import random
 
 import arxiv
 from slack_sdk import WebClient
-from slack_sdk.errors import SlackApiError
 
 from summarize import Summarizer
 
