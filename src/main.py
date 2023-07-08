@@ -6,7 +6,7 @@ import random
 import arxiv
 from slack_sdk import WebClient
 
-from summarize import Summarizer
+from summarizer import Summarizer
 
 SLACK_API_TOKEN = os.environ["SLACK_API_TOKEN"]
 SLACK_CHANNEL = os.environ["SLACK_CHANNEL"]
