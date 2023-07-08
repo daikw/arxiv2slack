@@ -44,6 +44,7 @@ def main(client: WebClient):
 *Link*: {result.entry_id}
 *Title*: {result.title}
 *PublishedAt*: {result.published.strftime('%Y-%m-%d %H:%M:%S')}
+*FirstAuthor*: {result.authors[0].name}
 ---
 {Summarizer(result, lang=SUMMARIZE_LANGUAGE, content=SUMMARIZE_CONTENT).summarize()}
 """
