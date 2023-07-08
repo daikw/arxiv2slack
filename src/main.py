@@ -45,7 +45,4 @@ def main(client: WebClient):
 
 if __name__ == "__main__":
     client = WebClient(token=SLACK_API_TOKEN)
-    try:
-        main(client)
-    except Exception as e:
-        print(e)
+    main(client)
