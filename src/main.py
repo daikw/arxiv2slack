@@ -11,12 +11,14 @@ SLACK_API_TOKEN = os.environ["SLACK_API_TOKEN"]
 SLACK_CHANNEL = os.environ["SLACK_CHANNEL"]
 ARXIV_QUERY = os.environ["ARXIV_QUERY"]
 
+SAMPLING_STRATEGY = os.environ.get("SAMPLING_STRATEGY", "daily")
+
 SUMMARIZE_LANGUAGE = os.environ.get("SUMMARIZE_LANGUAGE", "ja")
 SUMMARIZE_CONTENT = os.environ.get("SUMMARIZE_CONTENT", "arxiv_summary")
 
 
 def main(client: WebClient):
-    results = ArxivSampler(query=ARXIV_QUERY, strategy="daily").sample(k=3)
+    results = ArxivSampler(query=ARXIV_QUERY, strategy=SAMPLING_STRATEGY).sample(k=3)
     if len(results) == 0:
         client.chat_postMessage(
             channel=SLACK_CHANNEL,

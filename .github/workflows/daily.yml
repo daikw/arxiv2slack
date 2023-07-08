@@ -18,6 +18,7 @@ jobs:
     env:
       ARXIV_QUERY: ${{ vars.ARXIV_QUERY }}
       SUMMARIZE_CONTENT: ${{ vars.SUMMARIZE_CONTENT }}
+      SAMPLING_STRATEGY: ${{ vars.SAMPLING_STRATEGY }}
       SLACK_CHANNEL: ${{ vars.SLACK_CHANNEL }}
       SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
