@@ -68,7 +68,7 @@ class ArxivSampler:
             tmp: list[arxiv.Result] = []
             now = time.time()
             for result in search.results():
-                delta = now - result.published.date().timestamp()
+                delta = now - result.published.timestamp()
                 if delta < 24 * 60 * 60:
                     tmp.append(result)
                 else:
