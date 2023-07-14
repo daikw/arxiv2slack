@@ -12,7 +12,7 @@ jobs:
       matrix:
         include:
           - environment: private-slack-workspace
-          - environment: akerun
+          # - environment: akerun
           - environment: karakuri-nims
     environment: ${{ matrix.environment }}
     env:
